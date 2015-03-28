@@ -1,7 +1,7 @@
 # word-sense-modeling
 
 ### Convert to word2vec
-A tool which convert text based multiple word embedings to binary word2vec file. The output file can be used in [gensim](https://radimrehurek.com/gensim/) or other [word2vec](https://code.google.com/p/word2vec/) toolkits.
+This tool converts text based multiple word embedings to binary word2vec file formats. The output file can be used in [gensim](https://radimrehurek.com/gensim/) or other [word2vec](https://code.google.com/p/word2vec/) toolkits. This program has been tested on multiple sense vectors produced by [this code](https://bitbucket.org/jeevan_shankar/multi-sense-skipgram/overview) and [this paper by Neelakantan et al. 2014](https://people.cs.umass.edu/~arvind/emnlp2014.pdf)
 
 The text file can be in two different formats:
 
