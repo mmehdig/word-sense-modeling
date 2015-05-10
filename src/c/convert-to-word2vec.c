@@ -31,10 +31,13 @@ int main(int argc, char **argv)
     float vector[max_dimension];
     
     if (argc < 2) {
-        printf("Usage: ./convert-to-word2vec <FILE>\nwhere FILE global and multiple word-sense vectos per word\n");
+        printf("Default usage:\n   ./convert-to-word2vec FILE\n");
+        printf("Second file format usage:\n   ./convert-to-word2vec FILE 1\n");
+        printf("FILE:\tThe address of the multiple-word-vector file in text format.\n");
         return 0;
     }
     strcpy(file_name, argv[1]);
+    default_maxout = 1;
     if (argc > 2) default_maxout = atoi(argv[2]);
     src = fopen(file_name, "rb");
     if (src == NULL) {

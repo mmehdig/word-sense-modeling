@@ -6,6 +6,5 @@ all: convert-to-word2vec
 
 convert-to-word2vec : convert-to-word2vec.c
 	$(CC) convert-to-word2vec.c -o convert-to-word2vec $(CFLAGS)
-
 clean:
 	rm -rf convert-to-word2vec
