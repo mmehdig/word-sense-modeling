@@ -155,6 +155,7 @@ int main(int argc, char **argv)
             while (1) {
                 st1[c] = toupper(fgetc(stdin));
                 if (feof(stdin) || (st1[c] == '\t') || (c == max_w)) break;
+                printf("\n%s\n", st1);
                 c++;
             }
             st1[c] = '\0';
