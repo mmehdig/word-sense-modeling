@@ -236,6 +236,7 @@ int main(int argc, char **argv)
                 // initialize temprorary vector
                 for (a = 0; a < size; a++) tmp_vec[a] = 0;
 
+                n_tmp_vec = 0;
                 for (p = 0; p < number_of_pos; p++) {
                     context_word[c] = 0;
                     strcat(context_word, "..");
@@ -313,15 +314,47 @@ int main(int argc, char **argv)
                 continue;
             }
             
-            // find the word
-            for (b = 0; b < n_words; b++)
-                if (!strcmp(&vocab[b * max_w], context_word)) break;
-            
-            // not found?
-            if (b == n_words) continue;
+            if (enable_pos) {
+                // initialize temprorary vector
+                for (a = 0; a < size; a++) tmp_vec[a] = 0;
 
-            // add the word context vector to overall context_vector
-            for (a = 0; a < size; a++) contex_vec2[a] += M[a + b * size];
+                n_tmp_vec = 0;
+                for (p = 0; p < number_of_pos; p++) {
+                    context_word[c] = 0;
+                    strcat(context_word, "..");
+                    strcat(context_word, pos_tags[p]);
+
+                    // find the word
+                    for (b = 0; b < n_words; b++)
+                        if (!strcmp(&vocab[b * max_w], context_word)) break;
+                    // not found?
+                    if (b == n_words) continue;
+
+                    // add the word context vector to overall context_vector
+                    for (a = 0; a < size; a++) tmp_vec[a] += M[a + b * size];
+
+                    n_tmp_vec++;
+                }
+
+                // there is an average vector for this context word!
+                if (n_tmp_vec){
+                    for (a = 0; a < size; a++) contex_vec2[a] += tmp_vec[a] / n_tmp_vec;
+                } else {
+                    continue;
+                }
+                
+            } else {
+                // find the word
+                for (b = 0; b < n_words; b++)
+                    if (!strcmp(&vocab[b * max_w], context_word)) break;
+                
+                // not found?
+                if (b == n_words) continue;
+
+                // add the word context vector to overall context_vector
+                for (a = 0; a < size; a++) contex_vec2[a] += M[a + b * size];
+            }
+            
 
             word_counter++;
         }
