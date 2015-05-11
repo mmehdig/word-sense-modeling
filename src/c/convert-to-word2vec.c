@@ -23,7 +23,7 @@ int main(int argc, char **argv)
     FILE *trg;
     char file_name[2000];
     long long words, dimensions, a, b, c, vectors, vectors_prog;
-    unsigned short int max_s, emb_s, s, if_maxout, default_maxout, n;
+    unsigned short int max_s, emb_s, s, if_maxout, default_file_format, n;
     float *M;
     char *vocab;
     char word[max_w];
@@ -37,8 +37,8 @@ int main(int argc, char **argv)
         return 0;
     }
     strcpy(file_name, argv[1]);
-    default_maxout = 1;
-    if (argc > 2) default_maxout = atoi(argv[2]);
+    default_file_format = 0;
+    if (argc > 2) default_file_format = atoi(argv[2]);
     src = fopen(file_name, "rb");
     if (src == NULL) {
         printf("Input file not found\n");
@@ -47,7 +47,7 @@ int main(int argc, char **argv)
 
     // maxout!! clusterCenter(v)(s) / (1.0 * clusterCount(v)(s)):
     // this vector and next vector are the same
-    if (default_maxout) {
+    if (default_file_format) {
         fscanf(src, "%lld", &words);
         fscanf(src, "%lld", &dimensions);
         
