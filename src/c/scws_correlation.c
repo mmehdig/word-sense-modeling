@@ -17,6 +17,8 @@ const long long max_size = 3000;         // max length of strings
 const long long max_w = 50;              // max length of string for each word entries
 const unsigned short int N = 10;         // number of closest words considered in cluster selection formula
 const unsigned short int n_vectors = 3;  // max number of embedded vectors per word
+const char *pos_tags[] = {"n", "aj", "av", "v", ""} // possible pos tags
+const unsigned short int number_of_pos = 5; // number of valid postags
 
 unsigned short int extraction(char *str_list[n_vectors], char strx[max_size], long long locs[n_vectors], long long n_words, char *vocab)
 {
@@ -59,10 +61,12 @@ int main(int argc, char **argv)
     FILE *f;
     char st1[max_w], st2[max_w], file_name[max_size];
     char context_word[max_w];
-    float contex_vec1[1000], contex_vec2[1000];
+    float contex_vec1[1000], contex_vec2[1000], tmp_vec[1000];
+    unsigned short int n_tmp_vec = 0;
     unsigned short int word_counter;
     unsigned short int _skip, _break;
     unsigned short int enable_pos = 0;
+    unsigned short int p;
 
     char *st1x[max_size], *st2x[max_size];
     unsigned short int i, j;
@@ -228,16 +232,45 @@ int main(int argc, char **argv)
                 _skip = 0;
                 continue;
             }
-            
-            // find the word
-            for (b = 0; b < n_words; b++)
-                if (!strcmp(&vocab[b * max_w], context_word)) break;
-            
-            // not found?
-            if (b == n_words) continue;
-            
-            // add the word context vector to overall context_vector
-            for (a = 0; a < size; a++) contex_vec1[a] += M[a + b * size];
+            if (enable_pos) {
+                // initialize temprorary vector
+                for (a = 0; a < size; a++) tmp_vec[a] = 0;
+
+                for (p = 0; p < number_of_pos; p++) {
+                    context_word[c] = 0;
+                    strcat(context_word, "..");
+                    strcat(context_word, pos_tags[p]);
+
+                    // find the word
+                    for (b = 0; b < n_words; b++)
+                        if (!strcmp(&vocab[b * max_w], context_word)) break;
+                    // not found?
+                    if (b == n_words) continue;
+
+                    // add the word context vector to overall context_vector
+                    for (a = 0; a < size; a++) tmp_vec[a] += M[a + b * size];
+
+                    n_tmp_vec++;
+                }
+
+                // there is an average vector for this context word!
+                if (n_tmp_vec){
+                    for (a = 0; a < size; a++) contex_vec1[a] += tmp_vec[a] / n_tmp_vec;
+                } else {
+                    continue;
+                }
+                
+            } else {
+                // find the word
+                for (b = 0; b < n_words; b++)
+                    if (!strcmp(&vocab[b * max_w], context_word)) break;
+                // not found?
+                if (b == n_words) continue;
+
+                // add the word context vector to overall context_vector
+                for (a = 0; a < size; a++) contex_vec1[a] += M[a + b * size];
+            }
+                        
 
             word_counter++;
         }
