@@ -17,7 +17,7 @@ const long long max_size = 3000;         // max length of strings
 const long long max_w = 50;              // max length of string for each word entries
 const unsigned short int N = 10;         // number of closest words considered in cluster selection formula
 const unsigned short int n_vectors = 3;  // max number of embedded vectors per word
-const char *pos_tags[] = {"n", "aj", "av", "v", ""} // possible pos tags
+const char *pos_tags[] = {"n", "aj", "av", "v", ""}; // possible pos tags
 const unsigned short int number_of_pos = 5; // number of valid postags
 
 unsigned short int extraction(char *str_list[n_vectors], char strx[max_size], long long locs[n_vectors], long long n_words, char *vocab)
