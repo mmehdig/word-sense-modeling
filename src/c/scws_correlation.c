@@ -59,7 +59,7 @@ unsigned short int extraction(char *str_list[n_vectors], char strx[max_size], lo
 int main(int argc, char **argv)
 {
     FILE *f;
-    char st1[max_w], st2[max_w], file_name[max_size];
+    char dummy, st1[max_w], st2[max_w], file_name[max_size];
     char context_word[max_w];
     float contex_vec1[1000], contex_vec2[1000], tmp_vec[1000];
     unsigned short int n_tmp_vec = 0;
@@ -134,11 +134,10 @@ int main(int argc, char **argv)
         
         c = 0;
         while (1) {
-            st1[c] = toupper(fgetc(stdin));
-            if (feof(stdin) || (st1[c] == '\t') || (c == max_w)) break;
+            dummy = fgetc(stdin);
+            if (feof(stdin) || (dummy == '\t') || (c == max_w)) break;
             c++;
         }
-        st1[c] = 0;
         
         // <word1>
         c = 0;
@@ -163,11 +162,10 @@ int main(int argc, char **argv)
             // DUMMY!!
             c = 0;
             while (1) {
-                st2[c] = toupper(fgetc(stdin));
-                if (feof(stdin) || (st2[c] == '\t') || (c == max_w)) break;
+                dummy = fgetc(stdin);
+                if (feof(stdin) || (dummy == '\t') || (c == max_w)) break;
                 c++;
             }
-            st2[c] = 0;
         }
         
         // <word2>
@@ -193,14 +191,13 @@ int main(int argc, char **argv)
             // DUMMY!!
             c = 0;
             while (1) {
-                context_word[c] = toupper(fgetc(stdin));
-                if (feof(stdin) || (context_word[c] == '\t') || (c == max_w)) break;
+                dummy = fgetc(stdin);
+                if (feof(stdin) || (dummy == '\t') || (c == max_w)) break;
                 c++;
             }
-            context_word[c] = 0;
         }
 
-        printf("%s\t%s\t%f", st1, st2, gold_score);
+        printf("\n%s\t%s", st1, st2);
 
         // <word1 in context>
         // initialize contex vector
@@ -416,7 +413,7 @@ int main(int argc, char **argv)
         dist = fabsf(10 * dist);
 
         // print the report:
-        printf("\t%f\n", dist);
+        printf("\t%f\t%f\n", gold_score, dist);
         
         X[test_count] = gold_score;
         best_Y[test_count] = dist;
