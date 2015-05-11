@@ -146,7 +146,7 @@ int main(int argc, char **argv)
             if (feof(stdin) || (st1[c] == '\t') || (c == max_w)) break;
             c++;
         }
-        st1[c] = 0;
+        st1[c] = '\0';
         
         // <POS of word1> 
         if (enable_pos) {
@@ -157,7 +157,7 @@ int main(int argc, char **argv)
                 if (feof(stdin) || (st1[c] == '\t') || (c == max_w)) break;
                 c++;
             }
-            st1[c] = 0;
+            st1[c] = '\0';
         } else {
             // DUMMY!!
             c = 0;
@@ -175,7 +175,7 @@ int main(int argc, char **argv)
             if (feof(stdin) || (st2[c] == '\t') || (c == max_w)) break;
             c++;
         }
-        st2[c] = 0;
+        st2[c] = '\0';
         
         // <POS of word2>
         if (enable_pos) {
@@ -186,7 +186,7 @@ int main(int argc, char **argv)
                 if (feof(stdin) || (st2[c] == '\t') || (c == max_w)) break;
                 c++;
             }
-            st2[c] = 0;
+            st2[c] = '\0';
         } else {
             // DUMMY!!
             c = 0;
@@ -222,7 +222,7 @@ int main(int argc, char **argv)
             
             // not found?
             if (context_word[c] == '\t') _break = 1;
-            context_word[c] = 0;
+            context_word[c] = '\0';
 
             // skip the tagged word
             if (!strcmp(context_word, "<b>")) {
@@ -238,7 +238,7 @@ int main(int argc, char **argv)
 
                 n_tmp_vec = 0;
                 for (p = 0; p < number_of_pos; p++) {
-                    context_word[c] = 0;
+                    context_word[c] = '\0';
                     strcat(context_word, "..");
                     strcat(context_word, pos_tags[p]);
 
@@ -303,7 +303,7 @@ int main(int argc, char **argv)
             
             // not found?
             if (context_word[c] == '\t') _break = 1;
-            context_word[c] = 0;
+            context_word[c] = '\0';
             
             // skip the tagged word
             if (!strcmp(context_word, "<b>")) {
@@ -320,7 +320,7 @@ int main(int argc, char **argv)
 
                 n_tmp_vec = 0;
                 for (p = 0; p < number_of_pos; p++) {
-                    context_word[c] = 0;
+                    context_word[c] = '\0';
                     strcat(context_word, "..");
                     strcat(context_word, pos_tags[p]);
 
