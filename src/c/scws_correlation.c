@@ -199,6 +199,9 @@ int main(int argc, char **argv)
             }
             context_word[c] = 0;
         }
+
+        printf("%s\t%s\t%f", st1, st2, gold_score);
+
         // <word1 in context>
         // initialize contex vector
         for (a = 0; a < size; a++) contex_vec1[a] = 0;
@@ -365,10 +368,6 @@ int main(int argc, char **argv)
         // <average human rating>
         scanf("%f", &gold_score);
         
-        // no guess yet!
-        best_guess = 0;
-        worst_guess = 0;
-        high_sim = 0;
         // uppercase first word
         for (a = 0; a < strlen(st1); a++) st1[a] = toupper(st1[a]);
         for (a = 0; a < strlen(st2); a++) st2[a] = toupper(st2[a]);
@@ -417,7 +416,7 @@ int main(int argc, char **argv)
         dist = fabsf(10 * dist);
 
         // print the report:
-        printf("%s\t%s\t%f\t%f\n", st1, st2, gold_score, dist);
+        printf("\t%f\n", dist);
         
         X[test_count] = gold_score;
         best_Y[test_count] = dist;
