@@ -82,7 +82,7 @@ int main(int argc, char **argv)
     double X_avg = 0, X_sigma = 0, Y_avg = 0, Y_sigma = 0, rho = 0;
     
     
-    long long n_words, size, a, b, c;
+    long long n_words, size, a, b, c, d;
     float *M;
     char *vocab;
     if (argc < 2) {
@@ -155,10 +155,10 @@ int main(int argc, char **argv)
             while (1) {
                 st1[c] = toupper(fgetc(stdin));
                 if (feof(stdin) || (st1[c] == '\t') || (c == max_w)) break;
-                printf("\n%s\n", st1);
                 c++;
             }
             st1[c] = '\0';
+            printf("\nst1=%s\n", st1);
         } else {
             // DUMMY!!
             c = 0;
@@ -177,7 +177,7 @@ int main(int argc, char **argv)
             c++;
         }
         st2[c] = '\0';
-        
+        printf("\nst2=%s\n", st2);
         // <POS of word2>
         if (enable_pos) {
             st2[c++] = '.';
@@ -239,9 +239,15 @@ int main(int argc, char **argv)
 
                 n_tmp_vec = 0;
                 for (p = 0; p < number_of_pos; p++) {
-                    context_word[c] = '\0';
-                    strcat(context_word, "..");
-                    strcat(context_word, pos_tags[p]);
+                    context_word[c] = '.';
+                    context_word[c+1] = '.';
+                    d = 0;
+                    while (1) {
+                        context_word[c+2+d] = pos_tags[p][d];
+                        if ((pos_tags[p][d] == '\0') || (c+2+d == max_w)) break;
+                        d++;
+                    }
+                    context_word[c+2+d] = '\0';
 
                     // find the word
                     for (b = 0; b < n_words; b++)
@@ -321,9 +327,15 @@ int main(int argc, char **argv)
 
                 n_tmp_vec = 0;
                 for (p = 0; p < number_of_pos; p++) {
-                    context_word[c] = '\0';
-                    strcat(context_word, "..");
-                    strcat(context_word, pos_tags[p]);
+                    context_word[c] = '.';
+                    context_word[c+1] = '.';
+                    d = 0;
+                    while (1) {
+                        context_word[c+2+d] = pos_tags[p][d];
+                        if ((pos_tags[p][d] == '\0') || (c+2+d == max_w)) break;
+                        d++;
+                    }
+                    context_word[c+2+d] = '\0';
 
                     // find the word
                     for (b = 0; b < n_words; b++)
