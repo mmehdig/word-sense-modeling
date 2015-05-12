@@ -454,6 +454,7 @@ int main(int argc, char **argv)
 
         // print the report:
         printf("\t%f\t%f\n", gold_score, dist);
+        printf("%d\t%d\n", best_i_loc, best_j_loc);
         printf("%s\t%s\n", &vocab[best_i_loc * max_w], &vocab[best_j_loc * max_w]);
         X[test_count] = gold_score;
         best_Y[test_count] = dist;
