@@ -16,15 +16,15 @@
 const long long max_size = 3000;         // max length of strings
 const long long max_w = 50;              // max length of string for each word entries
 const unsigned short int N = 10;         // number of closest words considered in cluster selection formula
-const unsigned short int n_vectors = 3;  // max number of embedded vectors per word
+const unsigned short int n_vectors = 4;  // max number of embedded vectors per word
 const char *pos_tags[] = {"n", "aj", "av", "v", ""}; // possible pos tags
-const unsigned short int number_of_pos = 5; // number of valid postags
+const unsigned short int number_of_pos = 5; // number of postags in pos_tags
 
 unsigned short int extraction(char *str_list[n_vectors], char strx[max_size], long long locs[n_vectors], long long n_words, char *vocab)
 {
     unsigned short int n_i = 0;
     unsigned short int i;
-    long long b;
+    long long b, a, c;
     char *ch_int;
     ch_int = (char *) malloc(sizeof(char));
     
@@ -34,11 +34,26 @@ unsigned short int extraction(char *str_list[n_vectors], char strx[max_size], lo
         locs[i] = -1;
         
         str_list[i] = (char *) malloc(max_size*sizeof(char));
-        strcpy(str_list[i], strx);
+        
+        
+        // strcpy(str_list[i], strx);
+        for(c = 0; c < max_w; c++) {
+            str_list[i][c] = strx[c];
+            if (str_list[i][c] == '\0') break;
+        }
+
+        
         if (i > 0) {
-            strcat(str_list[i], "..");
+            str_list[i][c++] = '.';
+            str_list[i][c++] = '.';
+            
             *ch_int = (char)(((int)'0')+i);
-            strcat(str_list[i], ch_int);
+            
+            while(1) {
+                str_list[i][c] = ch_int[c];
+                if ((ch_int[c] == '\0') || (c == max_w)) break;
+                c++;
+            }
         }
         
         // find the word
@@ -70,7 +85,7 @@ int main(int argc, char **argv)
 
     char *st1x[max_size], *st2x[max_size];
     unsigned short int i, j;
-    unsigned short int n_i, n_j, min_i = 1;
+    unsigned short int n_i, n_j, min_i = 0;
     long long i_locs[n_vectors], j_locs[n_vectors], best_i_loc, best_j_loc;
     unsigned int test_count = 0, n, m;
     float dist, len, best_dist;
@@ -384,17 +399,13 @@ int main(int argc, char **argv)
         n_i = extraction(st1x, st1, i_locs, n_words, vocab);
         n_j = extraction(st2x, st2, j_locs, n_words, vocab);
         
-        // count it as a valid question if all four words were in the model:
+        // count it as an invalid question if no sense-vector was in the model:
         if ((n_i == 0) || (n_j == 0)) {
-            //            printf("%s\t%s\t%f\t%f\n", st1, st2, gold_score, -1.0);
             printf("\t%f\t-\n", gold_score);
             continue;
-        }
+        }        
         
-        if ((n_i==1) && (n_j==1)) min_i = 0;
-        
-        
-        // select one of the senses for word1
+        // select one of the senses for word1 which is closes to the context1
         best_dist = 0;
         for (i=min_i; i < n_i; i++) {
             dist = 0;
@@ -407,7 +418,7 @@ int main(int argc, char **argv)
             }
         }
         
-        // select one of the senses for word2
+        // select one of the senses for word2 which is closes to the context2
         best_dist = 0;
         for (j=min_i; j < n_j; j++) {
             dist = 0;
