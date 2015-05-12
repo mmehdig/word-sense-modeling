@@ -24,7 +24,7 @@ unsigned short int extraction(char *str_list[n_vectors], char strx[max_size], lo
 {
     unsigned short int n_i = 0;
     unsigned short int i;
-    long long b, a, c;
+    long long b, c;
     char *ch_int;
     ch_int = (char *) malloc(sizeof(char));
     
@@ -87,7 +87,6 @@ int main(int argc, char **argv)
     unsigned int test_count = 0, n, m;
     float dist, len, best_dist;
     float gold_score = -1;
-    float best_guess, high_sim, worst_guess;
     float X[max_size], best_Y[max_size], worst_Y[max_size], high_sim_Y[max_size], tmp;
     float sorted_X[max_size], *sorted_Y, sorted_best_Y[max_size], sorted_worst_Y[max_size], sorted_high_sim_Y[max_size];
     int ranked_Y[max_size];
@@ -464,7 +463,7 @@ int main(int argc, char **argv)
 
         // print the report:
         printf("\t%f\t%f\n", gold_score, dist);
-        printf("%s\t%s\n", &vocab[best_i_loc * max_w], &vocab[best_j_loc * max_w]);
+        // printf("%s\t%s\n", &vocab[best_i_loc * max_w], &vocab[best_j_loc * max_w]);
         X[test_count] = gold_score;
         best_Y[test_count] = dist;
         
