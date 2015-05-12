@@ -280,6 +280,8 @@ int main(int argc, char **argv)
                     len = 0;
                     for (a = 0; a < size; a++) len += tmp_vec[a] * tmp_vec[a];
                     len = sqrt(len);
+                    // empty vector!
+                    if (len == 0) continue;
                     // add to the context vector:
                     for (a = 0; a < size; a++) contex_vec1[a] += tmp_vec[a] / len;
                 } else {
@@ -305,7 +307,9 @@ int main(int argc, char **argv)
         len = 0;
         for (a = 0; a < size; a++) len += contex_vec1[a] * contex_vec1[a];
         len = sqrt(len);
-        for (a = 0; a < size; a++) contex_vec1[a] /= len;
+        // should be not zero vector!
+        if (len > 0)
+            for (a = 0; a < size; a++) contex_vec1[a] /= len;
 
         
         // <word2 in context>
@@ -376,6 +380,8 @@ int main(int argc, char **argv)
                     len = 0;
                     for (a = 0; a < size; a++) len += tmp_vec[a] * tmp_vec[a];
                     len = sqrt(len);
+                    // empty vector!
+                    if (len == 0) continue;
                     // add to the context vector:
                     for (a = 0; a < size; a++) contex_vec2[a] += tmp_vec[a] / len;
                 } else {
@@ -401,7 +407,9 @@ int main(int argc, char **argv)
         len = 0;
         for (a = 0; a < size; a++) len += contex_vec2[a] * contex_vec2[a];
         len = sqrt(len);
-        for (a = 0; a < size; a++) contex_vec2[a] /= len;
+        // should be not zero vector!
+        if (len > 0)
+            for (a = 0; a < size; a++) contex_vec2[a] /= len;
         
         // <average human rating>
         scanf("%f", &gold_score);
