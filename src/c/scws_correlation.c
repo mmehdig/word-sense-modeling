@@ -423,6 +423,7 @@ int main(int argc, char **argv)
         // select one of the senses for word1 which is closes to the context1
         best_dist = 0;
         for (i=min_i; i < n_i; i++) {
+            printf("%d, %d", i, i_locs[i]);
             dist = 0;
             for (a = 0; a < size; a++) dist += contex_vec1[a] * M[a + i_locs[i] * size];
             dist = fabsf(dist);
