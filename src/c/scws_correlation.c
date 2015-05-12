@@ -421,12 +421,13 @@ int main(int argc, char **argv)
         }        
         
         // select one of the senses for word1 which is closes to the context1
-        best_dist = 0;
-        for (i=1; i < n_i; i++) {
+        best_dist = -1;
+        for (i=0; i < n_i; i++) {
             printf("\n%d, %d, %s\n", i, i_locs[i], &vocab[i_locs[i] * max_w]);
             dist = 0;
             for (a = 0; a < size; a++) dist += contex_vec1[a] * M[a + i_locs[i] * size];
-            dist = fabsf(dist);
+            // normalize the cosine measure:
+            dist = (1+dist)/2;
             
             if (best_dist < dist) {
                 best_dist = dist;
@@ -435,12 +436,13 @@ int main(int argc, char **argv)
         }
         
         // select one of the senses for word2 which is closes to the context2
-        best_dist = 0;
-        for (j=1; j < n_j; j++) {
+        best_dist = -1;
+        for (j=0; j < n_j; j++) {
             printf("\n%d, %d, %s\n", j, j_locs[j], &vocab[j_locs[j] * max_w]);
             dist = 0;
             for (a = 0; a < size; a++) dist += contex_vec2[a] * M[a + j_locs[j] * size];
-            dist = fabsf(dist);
+            // normalize the cosine measure:
+            dist = (1+dist)/2;
             
             if (best_dist < dist) {
                 best_dist = dist;
