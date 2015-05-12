@@ -432,6 +432,7 @@ int main(int argc, char **argv)
             if (best_dist < dist) {
                 best_dist = dist;
                 best_i_loc = i_locs[i];
+                printf("\nbest i? %d, %d", i, best_i_loc);
             }
         }
         
@@ -447,6 +448,7 @@ int main(int argc, char **argv)
             if (best_dist < dist) {
                 best_dist = dist;
                 best_j_loc = j_locs[j];
+                printf("\nbest j? %d, %d", j, best_j_loc);
             }
         }
         
