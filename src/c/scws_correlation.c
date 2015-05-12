@@ -439,22 +439,23 @@ int main(int argc, char **argv)
         // select one of the senses for word2 which is closes to the context2
         best_dist = -1;
         for (j=0; j < n_j; j++) {
-            printf("\n%d, %d, %s\n", j, j_locs[j], &vocab[j_locs[j] * max_w]);
+            printf("\n(%d, %d), %s\n", j, j_locs[j], &vocab[j_locs[j] * max_w]);
             dist = 0;
             for (a = 0; a < size; a++) dist += contex_vec2[a] * M[a + j_locs[j] * size];
             // normalize the cosine measure:
             dist = (1+dist)/2;
-            
+            printf("best: %f\tguess: %f\n", best_dist, dist);
             if (best_dist < dist) {
                 best_dist = dist;
                 best_j_loc = j_locs[j];
-                printf("\nbest j? %d, %d", j, best_j_loc);
+                printf("\nbest j? (%d, %d)", j, best_j_loc);
             }
         }
         
         dist = 0;
         for (a = 0; a < size; a++) dist += M[a + best_j_loc * size] * M[a + best_i_loc * size];
-        dist = fabsf(10 * dist);
+        // normalize the cosine measure and scale  it up within 0..10:
+        dist = 10 * (1+dist)/2;
 
         // print the report:
         printf("\t%f\t%f\n", gold_score, dist);
