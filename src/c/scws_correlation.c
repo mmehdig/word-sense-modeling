@@ -158,7 +158,6 @@ int main(int argc, char **argv)
                 c++;
             }
             st1[c] = '\0';
-            printf("\nst1=%s\n", st1);
         } else {
             // DUMMY!!
             c = 0;
@@ -177,7 +176,6 @@ int main(int argc, char **argv)
             c++;
         }
         st2[c] = '\0';
-        printf("\nst2=%s\n", st2);
         // <POS of word2>
         if (enable_pos) {
             st2[c++] = '.';
@@ -389,6 +387,7 @@ int main(int argc, char **argv)
         // count it as a valid question if all four words were in the model:
         if ((n_i == 0) || (n_j == 0)) {
             //            printf("%s\t%s\t%f\t%f\n", st1, st2, gold_score, -1.0);
+            printf("\t%f\t-\n", gold_score);
             continue;
         }
         
@@ -412,7 +411,7 @@ int main(int argc, char **argv)
         best_dist = 0;
         for (j=min_i; j < n_j; j++) {
             dist = 0;
-            for (a = 0; a < size; a++) dist += contex_vec1[a] * M[a + j_locs[j] * size];
+            for (a = 0; a < size; a++) dist += contex_vec2[a] * M[a + j_locs[j] * size];
             dist = fabsf(dist);
             
             if (best_dist < dist) {
