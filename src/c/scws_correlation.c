@@ -54,7 +54,7 @@ unsigned short int extraction(char *str_list[n_vectors], char strx[max_size], lo
                 if ((ch_int[c] == '\0') || (c == max_w)) break;
                 c++;
             }
-            printf("\n=>%s", &str_list[i]);
+            printf("\n=>%s", str_list[i]);
         }
         
         // find the word
@@ -66,7 +66,7 @@ unsigned short int extraction(char *str_list[n_vectors], char strx[max_size], lo
         // the corresponding vector for this particular word
         locs[i] = b;
         
-        printf("\n(%s, %s)", &vocab[b * max_w], &str_list[i]);
+        printf("\n(%s, %s)", &vocab[b * max_w], str_list[i]);
         // update number of embedded vectors
         n_i = i + 1;
     }
