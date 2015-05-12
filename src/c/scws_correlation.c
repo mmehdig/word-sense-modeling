@@ -47,18 +47,14 @@ unsigned short int extraction(char *str_list[n_vectors], char strx[max_size], lo
             str_list[i][c++] = '.';
             str_list[i][c++] = '.';
             
-            *ch_int = (char)(((int)'0')+i);
-            
-            while(1) {
-                str_list[i][c] = ch_int[c];
-                if ((ch_int[c] == '\0') || (c == max_w)) break;
-                c++;
-            }
-            printf("\n=>%s", str_list[i]);
+            // TODO: implement it for i > 10
+            if (i > 10) continue;
+            str_list[i][c++] = '0' + i;
+            str_list[i][c] = '\0';
         }
         
         // find the word
-        for (b = 0; b < n_words; b++) if (!strcmp(&vocab[b * max_w], str_list[i])) break;
+        for (b = 0; b < n_words; b++) if (strcmp(&vocab[b * max_w], str_list[i]) == 0) break;
         
         // not found?
         if (b == n_words) break;
@@ -66,7 +62,6 @@ unsigned short int extraction(char *str_list[n_vectors], char strx[max_size], lo
         // the corresponding vector for this particular word
         locs[i] = b;
         
-        printf("\n(%s, %s)", &vocab[b * max_w], str_list[i]);
         // update number of embedded vectors
         n_i = i + 1;
     }
