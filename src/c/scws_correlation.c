@@ -276,7 +276,12 @@ int main(int argc, char **argv)
 
                 // there is an average vector for this context word!
                 if (n_tmp_vec){
-                    for (a = 0; a < size; a++) contex_vec1[a] += tmp_vec[a] / n_tmp_vec;
+                    // normalize as one word vector:
+                    len = 0;
+                    for (a = 0; a < size; a++) len += tmp_vec[a] * tmp_vec[a];
+                    len = sqrt(len);
+                    // add to the context vector:
+                    for (a = 0; a < size; a++) contex_vec1[a] += tmp_vec[a] / len;
                 } else {
                     continue;
                 }
@@ -296,8 +301,11 @@ int main(int argc, char **argv)
             word_counter++;
         }
 
-        // avarage the context vector:
-        for (a = 0; a < size; a++) contex_vec1[a] /= word_counter;
+        // normalize the context vector:
+        len = 0;
+        for (a = 0; a < size; a++) len += contex_vec1[a] * contex_vec1[a];
+        len = sqrt(len);
+        for (a = 0; a < size; a++) contex_vec1[a] /= len;
 
         
         // <word2 in context>
@@ -364,7 +372,12 @@ int main(int argc, char **argv)
 
                 // there is an average vector for this context word!
                 if (n_tmp_vec){
-                    for (a = 0; a < size; a++) contex_vec2[a] += tmp_vec[a] / n_tmp_vec;
+                    // normalize as one word vector:
+                    len = 0;
+                    for (a = 0; a < size; a++) len += tmp_vec[a] * tmp_vec[a];
+                    len = sqrt(len);
+                    // add to the context vector:
+                    for (a = 0; a < size; a++) contex_vec2[a] += tmp_vec[a] / len;
                 } else {
                     continue;
                 }
@@ -380,13 +393,15 @@ int main(int argc, char **argv)
                 // add the word context vector to overall context_vector
                 for (a = 0; a < size; a++) contex_vec2[a] += M[a + b * size];
             }
-            
 
             word_counter++;
         }
         
-        // avarage the context vector:
-        for (a = 0; a < size; a++) contex_vec2[a] /= word_counter;
+        // normalize the context vector:
+        len = 0;
+        for (a = 0; a < size; a++) len += contex_vec2[a] * contex_vec2[a];
+        len = sqrt(len);
+        for (a = 0; a < size; a++) contex_vec2[a] /= len;
         
         // <average human rating>
         scanf("%f", &gold_score);
