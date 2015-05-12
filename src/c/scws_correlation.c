@@ -183,7 +183,7 @@ int main(int argc, char **argv)
             st2[c++] = '.';
             st2[c++] = '.';
             while (1) {
-                st1[c] = toupper(fgetc(stdin));
+                st2[c] = toupper(fgetc(stdin));
                 if (feof(stdin) || (st2[c] == '\t') || (c == max_w)) break;
                 c++;
             }
