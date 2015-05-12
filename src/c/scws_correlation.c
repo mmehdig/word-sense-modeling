@@ -83,7 +83,7 @@ int main(int argc, char **argv)
     char *st1x[max_size], *st2x[max_size];
     unsigned short int i, j;
     unsigned short int n_i, n_j, min_i = 1;
-    long long i_locs[n_vectors], j_locs[n_vectors], best_i_loc, best_j_loc;
+    long long i_locs[n_vectors], j_locs[n_vectors], best_i_loc=0, best_j_loc=0;
     unsigned int test_count = 0, n, m;
     float dist, len, best_dist;
     float gold_score = -1;
@@ -207,7 +207,7 @@ int main(int argc, char **argv)
             }
         }
 
-        printf("\n%s\t%s", st1, st2);
+        printf("%s\t%s", st1, st2);
 
         // <word1 in context>
         // initialize contex vector
