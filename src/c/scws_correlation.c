@@ -85,7 +85,7 @@ int main(int argc, char **argv)
 
     char *st1x[max_size], *st2x[max_size];
     unsigned short int i, j;
-    unsigned short int n_i, n_j, min_i = 0;
+    unsigned short int n_i, n_j, min_i = 1;
     long long i_locs[n_vectors], j_locs[n_vectors], best_i_loc, best_j_loc;
     unsigned int test_count = 0, n, m;
     float dist, len, best_dist;
@@ -428,10 +428,14 @@ int main(int argc, char **argv)
             continue;
         }        
         
+        // ignore global vector but if there was no other chice go for it!
+        if ((n_i==1) && (n_j==1)) min_i = 0;
+        else min_i = 1;
+
+
         // select one of the senses for word1 which is closes to the context1
         best_dist = -1;
-        for (i=0; i < n_i; i++) {
-            printf("\n%d, %d, %s\n", i, i_locs[i], &vocab[i_locs[i] * max_w]);
+        for (i=min_i; i < n_i; i++) {
             dist = 0;
             for (a = 0; a < size; a++) dist += contex_vec1[a] * M[a + i_locs[i] * size];
             // normalize the cosine measure:
@@ -440,23 +444,19 @@ int main(int argc, char **argv)
             if (best_dist < dist) {
                 best_dist = dist;
                 best_i_loc = i_locs[i];
-                printf("\nbest i? %d, %d", i, best_i_loc);
             }
         }
         
         // select one of the senses for word2 which is closes to the context2
         best_dist = -1;
-        for (j=0; j < n_j; j++) {
-            printf("\n(%d, %d), %s\n", j, j_locs[j], &vocab[j_locs[j] * max_w]);
+        for (j=min_i; j < n_j; j++) {
             dist = 0;
             for (a = 0; a < size; a++) dist += contex_vec2[a] * M[a + j_locs[j] * size];
             // normalize the cosine measure:
             dist = (1+dist)/2;
-            printf("best: %f\tguess: %f\n", best_dist, dist);
             if (best_dist < dist) {
                 best_dist = dist;
                 best_j_loc = j_locs[j];
-                printf("\nbest j? (%d, %d)", j, best_j_loc);
             }
         }
         
