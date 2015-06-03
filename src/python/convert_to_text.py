@@ -43,10 +43,10 @@ if __name__ == "__main__":
     en_file = open(os.path.join(en_file_path, en_file_name))
 
     # sentence-by-sentence output corpus, ready to be aligned with parallel corpora:
-    out_en_file = open(os.path.join(en_file_path, en_file_name + ".out.txt", "w"))
+    out_en_file = open(os.path.join(en_file_path, en_file_name + ".out.txt"), "w")
 
     # raw word forms corpus. (human readable)
-    out_en_raw_file = open(os.path.join(en_file_path, en_file_name + ".out.raw.txt", "w"))
+    out_en_raw_file = open(os.path.join(en_file_path, en_file_name + ".out.raw.txt"), "w")
     sentence = []
     raw = ""
     lemma = ""
@@ -85,10 +85,10 @@ if __name__ == "__main__":
     sv_file = open(os.path.join(sv_file_path, sv_file_name))
 
     # The sentence-by-sentence Swedish output file:
-    out_sv_file = open(os.path.join(sv_file_path, sv_file_name + ".out.txt", "w"))
+    out_sv_file = open(os.path.join(sv_file_path, sv_file_name + ".out.txt"), "w")
 
     # The paralleled sentences (ready for fast-align):
-    out_file = open(os.path.join(en_file_path, en_file_name + "__" + sv_file_name + ".out.parallel.txt", "w"))
+    out_file = open(os.path.join(en_file_path, en_file_name + "__" + sv_file_name + ".out.parallel.txt"), "w")
 
     # re-initialize variables:
     sentence = []
