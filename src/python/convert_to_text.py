@@ -20,8 +20,11 @@ __author__ = 'mehdi'
 
 import sys
 
-# CONLL FORMAT
+# CONLL word format:
 ID, FORM, LEMMA, PLEMMA, POS, PPOS, FEAT, PFEAT, HEAD, PHEAD, DEPREL, PDEPREL = range(12)
+
+# Swedish lemmatized format:
+SV_POS, SV_TOKEN = range(2)
 
 if __name__ == "__main__":
 
@@ -31,46 +34,81 @@ if __name__ == "__main__":
     en_file_name = sys.argv[1]
     sv_file_name = sys.argv[2]
 
-    # open the english conll file, extract raw sentences,
-    with open(en_file_name) as en_file:
-        with open(en_file_name + ".txt", "w") as out_en_file:
-            with open(en_file_name + "_raw.txt", "w") as out_en_raw_file:
-                sentence = []
-                raw = ""
-                for line in en_file:
-                    if line[0] == "\n":
-                        out_en_file.write(" ".join(sentence) + "\n")
-                        out_en_raw_file.write(raw.strip() + "\n")
-                        sentence = []
-                        raw = ""
-                    else:
-                        word = line.split("\t")
-                        if word[PLEMMA] not in [":"] and word[PFEAT] != 'punct':
-                            sentence.append(word[2] + ".." + word[3])
-                            raw += " " + word[1]
-                out_en_raw_file.close()
-            out_en_file.close()
-        en_file.close()
+    # read form source file:
+    # open the English CONLL file, extract raw sentences,
+    en_file = open(en_file_name)
 
-    with open(en_file_name + ".txt") as en_file:
-        with open(sv_file_name) as sv_file:
-            with open(sv_file_name + ".txt", "w") as out_sv_file:
-                with open(en_file_name + sv_file_name + "_parallel.txt", "w") as out_file:
-                    for line in sv_file:
-                        if line[0] == "\n":
-                            out_sv_file.write(" ".join(sentence) + "\n")
-                            english = en_file.readline().strip()
-                            swedish = " ".join(sentence)
-                            if swedish and english:
-                                out_file.write("%s ||| %s\n" % (english, swedish))
-                            sentence = []
-                        else:
-                            word = line.split("\t")
-                            if word[0] not in ['MID', 'MAD', 'PAD']:
-                                sentence.append(word[1].strip())
-                    out_file.close()
-                out_sv_file.close()
-            sv_file.close()
-        en_file.close()
+    # sentence-by-sentence output corpus, ready to be aligned with parallel corpora:
+    out_en_file = open(en_file_name + ".out.txt", "w")
+
+    # raw word forms corpus. (human readable)
+    out_en_raw_file = open(en_file_name + "_raw.txt", "w")
+    sentence = []
+    raw = ""
+
+    # read from source file:
+    for line in en_file:
+        # each line contain a CONLL formatted word.
+        # a new line means the previous sentence has ended.
+        if line[0] == "\n":
+            # join all words in the sentence
+            out_en_file.write(" ".join(sentence) + "\n")
+            out_en_raw_file.write(raw.strip() + "\n")
+            sentence = []
+            raw = ""
+        else:
+            word = line.split("\t")
+            if word[LEMMA] not in ["'", "''", '"', '""', "(", ")", "{", "}", "/", "`", "``"] and \
+                word[PLEMMA] not in [":"] and \
+                word[PFEAT] != 'punct':
+                sentence.append(word[LEMMA] + ".." + word[PLEMMA])
+                raw += " " + word[FORM]
+
+    # save unsaved files, and close opened file.
+    out_en_raw_file.close()
+    out_en_file.close()
+    en_file.close()
+
+    # open the sentence-by-sentence source file
+    en_file = open(en_file_name + ".out.txt")
+
+    # Swedish source file
+    sv_file = open(sv_file_name)
+
+    # The sentence-by-sentence Swedish output file:
+    out_sv_file = open(sv_file_name + ".out.txt", "w")
+
+    # The paralleled sentences (ready for fast-align):
+    out_file = open(en_file_name + "__" + sv_file_name + ".parallel.txt", "w")
+
+    # re-initialize variables:
+    sentence = []
+
+    # read from the Swedish file:
+    for line in sv_file:
+        # a new line means the previous sentence has ended.
+        if line[0] == "\n":
+            # glue all the swedish words in one sentence and write them on the file.
+            swedish = " ".join(sentence)
+            out_sv_file.write(swedish + "\n")
+
+            # read the english sentence :
+            english = en_file.readline().strip()
+
+            # if both sentences are available then write them in parallel file:
+            if len(swedish) > 1 and len(english) > 1:
+                out_file.write("%s ||| %s\n" % (english, swedish))
+
+            sentence = []
+        else:
+            # split the line with <tab>-separator (Swedish formatted file)
+            word = line.split("\t")
+            if word[SV_POS] not in ['MID', 'MAD', 'PAD']:
+                sentence.append(word[SV_TOKEN].strip())
+
+    out_file.close()
+    out_sv_file.close()
+    sv_file.close()
+    en_file.close()
 
 
