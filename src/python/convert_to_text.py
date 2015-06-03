@@ -18,7 +18,8 @@ write them in fast-align format <line_en> ||| <line_sv>
 """
 __author__ = 'mehdi'
 
-import sys
+import sys, os
+
 
 # CONLL word format:
 ID, FORM, LEMMA, PLEMMA, POS, PPOS, FEAT, PFEAT, HEAD, PHEAD, DEPREL, PDEPREL = range(12)
@@ -31,20 +32,24 @@ if __name__ == "__main__":
     if len(sys.argv) < 3:
         sys.exit('Please set english conll file and swedish lemmatized file: %s <en_conll_file> <sv_lemmatized_file>' % sys.argv[0])
 
-    en_file_name = sys.argv[1]
-    sv_file_name = sys.argv[2]
+    en_file_path = os.path.normpath(sys.argv[1])
+    sv_file_path = os.path.normpath(sys.argv[2])
+
+    en_file_path, en_file_name = os.path.split(en_file_path)
+    sv_file_path, sv_file_name = os.path.split(sv_file_path)
 
     # read form source file:
     # open the English CONLL file, extract raw sentences,
-    en_file = open(en_file_name)
+    en_file = open(os.path.join(en_file_path, en_file_name))
 
     # sentence-by-sentence output corpus, ready to be aligned with parallel corpora:
-    out_en_file = open(en_file_name + ".out.txt", "w")
+    out_en_file = open(os.path.join(en_file_path, en_file_name + ".out.txt", "w"))
 
     # raw word forms corpus. (human readable)
-    out_en_raw_file = open(en_file_name + "_raw.txt", "w")
+    out_en_raw_file = open(os.path.join(en_file_path, en_file_name + ".out.raw.txt", "w"))
     sentence = []
     raw = ""
+    lemma = ""
 
     # read from source file:
     for line in en_file:
@@ -56,13 +61,17 @@ if __name__ == "__main__":
             out_en_raw_file.write(raw.strip() + "\n")
             sentence = []
             raw = ""
+            lemma = ""
         else:
             word = line.split("\t")
-            if word[LEMMA] not in ["'", "''", '"', '""', "(", ")", "{", "}", "/", "`", "``"] and \
+            if word[LEMMA] not in [".", ",", "!", "?", ":", ";",
+                                   "'", "''", '"', '""', "(", ")",
+                                   "{", "}", "/", "`", "``"] and \
                 word[PLEMMA] not in [":"] and \
                 word[PFEAT] != 'punct':
                 sentence.append(word[LEMMA] + ".." + word[PLEMMA])
                 raw += " " + word[FORM]
+                lemma += " " + word[LEMMA]
 
     # save unsaved files, and close opened file.
     out_en_raw_file.close()
@@ -70,16 +79,16 @@ if __name__ == "__main__":
     en_file.close()
 
     # open the sentence-by-sentence source file
-    en_file = open(en_file_name + ".out.txt")
+    en_file = open(os.path.join(en_file_path, en_file_name + ".out.txt"))
 
     # Swedish source file
-    sv_file = open(sv_file_name)
+    sv_file = open(os.path.join(sv_file_path, sv_file_name))
 
     # The sentence-by-sentence Swedish output file:
-    out_sv_file = open(sv_file_name + ".out.txt", "w")
+    out_sv_file = open(os.path.join(sv_file_path, sv_file_name + ".out.txt", "w"))
 
     # The paralleled sentences (ready for fast-align):
-    out_file = open(en_file_name + "__" + sv_file_name + ".parallel.txt", "w")
+    out_file = open(os.path.join(en_file_path, en_file_name + "__" + sv_file_name + ".out.parallel.txt", "w"))
 
     # re-initialize variables:
     sentence = []
