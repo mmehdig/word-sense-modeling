@@ -49,7 +49,6 @@ if __name__ == "__main__":
     out_en_raw_file = open(os.path.join(en_file_path, en_file_name + ".out.raw.txt"), "w")
     sentence = []
     raw = ""
-    lemma = ""
 
     # read from source file:
     for line in en_file:
@@ -69,9 +68,14 @@ if __name__ == "__main__":
                                    "{", "}", "/", "`", "``"] and \
                 word[PLEMMA] not in [":"] and \
                 word[PFEAT] != 'punct':
-                sentence.append(word[LEMMA] + ".." + word[PLEMMA])
-                raw += " " + word[FORM]
-                lemma += " " + word[LEMMA]
+
+                if word[PLEMMA] == "CD":
+                    sentence.append("#NUMBER#")
+                    raw += " #NUMBER#"
+                else:
+                    sentence.append(word[LEMMA] + ".." + word[PLEMMA])
+                    raw += " " + word[FORM]
+
 
     # save unsaved files, and close opened file.
     out_en_raw_file.close()
@@ -105,15 +109,20 @@ if __name__ == "__main__":
             english = en_file.readline().strip()
 
             # if both sentences are available then write them in parallel file:
-            if len(swedish) > 1 and len(english) > 1:
-                out_file.write("%s ||| %s\n" % (english, swedish))
+            # if len(swedish) > 1 and len(english) > 1:
+            #     out_file.write("%s ||| %s\n" % (english, swedish))
+
+            out_file.write("%s ||| %s\n" % (english, swedish))
 
             sentence = []
         else:
             # split the line with <tab>-separator (Swedish formatted file)
             word = line.split("\t")
             if word[SV_POS] not in ['MID', 'MAD', 'PAD']:
-                sentence.append(word[SV_TOKEN].strip())
+                if word[SV_TOKEN][-4:] == "..nl":
+                    sentence.append("#NUMBER#")
+                else:
+                    sentence.append(word[SV_TOKEN].strip())
 
     out_file.close()
     out_sv_file.close()
