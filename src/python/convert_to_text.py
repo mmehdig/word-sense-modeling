@@ -45,7 +45,7 @@ if __name__ == "__main__":
     # sentence-by-sentence output corpus, ready to be aligned with parallel corpora:
     out_en_file = open(os.path.join(en_file_path, en_file_name + ".out.tmp.txt"), "w")
 
-    # raw word forms corpus. (human readable)
+    # raw, original word forms. (human readable)
     out_en_raw_file = open(os.path.join(en_file_path, en_file_name + ".out.raw.tmp.txt"), "w")
     sentence = []
     raw = ""
@@ -90,7 +90,7 @@ if __name__ == "__main__":
 
     # open the sentence-by-sentence source file
     en_file = open(os.path.join(en_file_path, en_file_name + ".out.tmp.txt"))
-    en_raw_file = open(os.path.join(en_file_path, en_file_name + ".out.tmp.txt"))
+    en_raw_file = open(os.path.join(en_file_path, en_file_name + ".out.raw.tmp.txt"))
 
     # Swedish source file
     sv_file = open(os.path.join(sv_file_path, sv_file_name))
