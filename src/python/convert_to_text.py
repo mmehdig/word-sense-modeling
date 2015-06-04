@@ -43,7 +43,7 @@ if __name__ == "__main__":
     en_file = open(os.path.join(en_file_path, en_file_name))
 
     # sentence-by-sentence output corpus, ready to be aligned with parallel corpora:
-    out_en_file = open(os.path.join(en_file_path, en_file_name + ".out.txt"), "w")
+    out_en_file = open(os.path.join(en_file_path, en_file_name + ".out.tmp.txt"), "w")
 
     # raw word forms corpus. (human readable)
     out_en_raw_file = open(os.path.join(en_file_path, en_file_name + ".out.raw.txt"), "w")
@@ -84,16 +84,17 @@ if __name__ == "__main__":
 
     total_sentences = sentence_counter
     print "total sentences: %d" % total_sentences
-    print os.path.join(en_file_path, en_file_name + ".out.txt")
+    print os.path.join(en_file_path, en_file_name + ".out.tmp.txt")
     print os.path.join(en_file_path, en_file_name + ".out.raw.txt")
 
     # open the sentence-by-sentence source file
-    en_file = open(os.path.join(en_file_path, en_file_name + ".out.txt"))
+    en_file = open(os.path.join(en_file_path, en_file_name + ".out.tmp.txt"))
 
     # Swedish source file
     sv_file = open(os.path.join(sv_file_path, sv_file_name))
 
     # The sentence-by-sentence Swedish output file:
+    out_en_file = open(os.path.join(en_file_path, en_file_name + ".out.txt"), "w")
     out_sv_file = open(os.path.join(sv_file_path, sv_file_name + ".out.txt"), "w")
 
     # The paralleled sentences (ready for fast-align):
@@ -109,16 +110,17 @@ if __name__ == "__main__":
         if line[0] == "\n":
             # glue all the swedish words in one sentence and write them on the file.
             swedish = " ".join(sentence)
-            out_sv_file.write(swedish + "\n")
 
             # read the english sentence :
             english = en_file.readline().strip()
 
             # if both sentences are available then write them in parallel file:
-            # if len(swedish) > 1 and len(english) > 1:
-            #     out_file.write("%s ||| %s\n" % (english, swedish))
+            # out_file.write("%s ||| %s\n" % (english, swedish))
+            if len(swedish) > 2 and len(english) > 2:
+                out_file.write("%s ||| %s\n" % (english, swedish))
+                out_en_file.write(english + "\n")
+                out_sv_file.write(swedish + "\n")
 
-            out_file.write("%s ||| %s\n" % (english, swedish))
             sentence_counter += 1
             sentence = []
 
