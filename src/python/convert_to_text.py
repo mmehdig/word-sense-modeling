@@ -138,7 +138,7 @@ if __name__ == "__main__":
             # split the line with <tab>-separator (Swedish formatted file)
             word = line.split("\t")
             if word[SV_POS] not in ['MID', 'MAD', 'PAD']:
-                if word[SV_TOKEN][-4:] == "..nl":
+                if word[SV_TOKEN].strip()[-4:] == "..nl":
                     sentence.append("#NUMBER#")
                 else:
                     sentence.append(word[SV_TOKEN].strip())
