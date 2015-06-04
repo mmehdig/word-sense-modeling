@@ -123,7 +123,7 @@ if __name__ == "__main__":
             sentence = []
 
             # progress bar
-            sys.stdout.write("\r%d%%" % (sentence_counter/total_sentences))
+            sys.stdout.write("\r%d%%" % ((sentence_counter*100)/total_sentences))
             sys.stdout.flush()
         else:
             # split the line with <tab>-separator (Swedish formatted file)
