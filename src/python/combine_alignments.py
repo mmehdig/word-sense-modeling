@@ -46,7 +46,7 @@ if __name__ == "__main__":
         for mapping in mappings:
             i, j = tuple(int(x) for x in mapping.split("-"))
             if i in sent_embed:
-                sent_embed[i].append(swedish[j])
+                sent_embed[i].add(swedish[j])
             else:
                 sent_embed[i] = set(swedish[j].split("|"))
 

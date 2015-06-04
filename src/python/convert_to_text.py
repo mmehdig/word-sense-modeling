@@ -142,5 +142,6 @@ if __name__ == "__main__":
     en_file.close()
 
     print
+    print os.path.join(en_file_path, en_file_name + ".out.txt")
     print os.path.join(sv_file_path, sv_file_name + ".out.txt")
     print os.path.join(en_file_path, en_file_name + "__" + sv_file_name + ".out.parallel.txt")
