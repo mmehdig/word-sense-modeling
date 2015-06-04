@@ -46,7 +46,7 @@ if __name__ == "__main__":
     out_en_file = open(os.path.join(en_file_path, en_file_name + ".out.tmp.txt"), "w")
 
     # raw word forms corpus. (human readable)
-    out_en_raw_file = open(os.path.join(en_file_path, en_file_name + ".out.raw.txt"), "w")
+    out_en_raw_file = open(os.path.join(en_file_path, en_file_name + ".out.raw.tmp.txt"), "w")
     sentence = []
     raw = ""
     sentence_counter = 0
@@ -84,18 +84,23 @@ if __name__ == "__main__":
 
     total_sentences = sentence_counter
     print "total sentences: %d" % total_sentences
+    print "Temporary files:"
     print os.path.join(en_file_path, en_file_name + ".out.tmp.txt")
-    print os.path.join(en_file_path, en_file_name + ".out.raw.txt")
+    print os.path.join(en_file_path, en_file_name + ".out.raw.tmp.txt")
 
     # open the sentence-by-sentence source file
     en_file = open(os.path.join(en_file_path, en_file_name + ".out.tmp.txt"))
+    en_raw_file = open(os.path.join(en_file_path, en_file_name + ".out.tmp.txt"))
 
     # Swedish source file
     sv_file = open(os.path.join(sv_file_path, sv_file_name))
 
     # The sentence-by-sentence Swedish output file:
-    out_en_file = open(os.path.join(en_file_path, en_file_name + ".out.txt"), "w")
     out_sv_file = open(os.path.join(sv_file_path, sv_file_name + ".out.txt"), "w")
+
+    # English sentences should be filtered out for those who had no translation in Swedish
+    out_en_file = open(os.path.join(en_file_path, en_file_name + ".out.txt"), "w")
+    out_en_raw_file = open(os.path.join(en_file_path, en_file_name + ".out.raw.txt"), "w")
 
     # The paralleled sentences (ready for fast-align):
     out_file = open(os.path.join(en_file_path, en_file_name + "__" + sv_file_name + ".out.parallel.txt"), "w")
@@ -113,12 +118,14 @@ if __name__ == "__main__":
 
             # read the english sentence :
             english = en_file.readline().strip()
+            english_raw = en_raw_file.readline().strip()
 
             # if both sentences are available then write them in parallel file:
             # out_file.write("%s ||| %s\n" % (english, swedish))
             if len(swedish) > 2 and len(english) > 2:
                 out_file.write("%s ||| %s\n" % (english, swedish))
                 out_en_file.write(english + "\n")
+                out_en_raw_file.write(english_raw + "\n")
                 out_sv_file.write(swedish + "\n")
 
             sentence_counter += 1
@@ -138,10 +145,19 @@ if __name__ == "__main__":
 
     out_file.close()
     out_sv_file.close()
+    out_en_file.close()
+    out_en_raw_file.close()
     sv_file.close()
     en_file.close()
+    en_raw_file.close()
+
+    # remove temporary files:
+    os.remove(os.path.join(en_file_path, en_file_name + ".out.tmp.txt"))
+    os.remove(os.path.join(en_file_path, en_file_name + ".out.raw.tmp.txt"))
 
     print
+    print "Produced files:"
     print os.path.join(en_file_path, en_file_name + ".out.txt")
     print os.path.join(sv_file_path, sv_file_name + ".out.txt")
+    print os.path.join(sv_file_path, sv_file_name + ".out.raw.txt")
     print os.path.join(en_file_path, en_file_name + "__" + sv_file_name + ".out.parallel.txt")
