@@ -49,7 +49,7 @@ if __name__ == "__main__":
     out_en_raw_file = open(os.path.join(en_file_path, en_file_name + ".out.raw.txt"), "w")
     sentence = []
     raw = ""
-
+    sentence_counter = 0
     # read from source file:
     for line in en_file:
         # each line contain a CONLL formatted word.
@@ -58,9 +58,9 @@ if __name__ == "__main__":
             # join all words in the sentence
             out_en_file.write(" ".join(sentence) + "\n")
             out_en_raw_file.write(raw.strip() + "\n")
+            sentence_counter += 1
             sentence = []
             raw = ""
-            lemma = ""
         else:
             word = line.split("\t")
             if word[LEMMA] not in [".", ",", "!", "?", ":", ";",
@@ -82,6 +82,11 @@ if __name__ == "__main__":
     out_en_file.close()
     en_file.close()
 
+    total_sentences = sentence_counter
+    print "total sentences: %d" % total_sentences
+    print os.path.join(en_file_path, en_file_name + ".out.txt")
+    print os.path.join(en_file_path, en_file_name + ".out.raw.txt")
+
     # open the sentence-by-sentence source file
     en_file = open(os.path.join(en_file_path, en_file_name + ".out.txt"))
 
@@ -96,6 +101,7 @@ if __name__ == "__main__":
 
     # re-initialize variables:
     sentence = []
+    sentence_counter = 0
 
     # read from the Swedish file:
     for line in sv_file:
@@ -113,8 +119,12 @@ if __name__ == "__main__":
             #     out_file.write("%s ||| %s\n" % (english, swedish))
 
             out_file.write("%s ||| %s\n" % (english, swedish))
-
+            sentence_counter += 1
             sentence = []
+
+            # progress bar
+            sys.stdout.write("\r%d%%" % (sentence_counter/total_sentences))
+            sys.stdout.flush()
         else:
             # split the line with <tab>-separator (Swedish formatted file)
             word = line.split("\t")
@@ -129,4 +139,6 @@ if __name__ == "__main__":
     sv_file.close()
     en_file.close()
 
-
+    print
+    print os.path.join(sv_file_path, sv_file_name + ".out.txt")
+    print os.path.join(en_file_path, en_file_name + "__" + sv_file_name + ".out.parallel.txt")
