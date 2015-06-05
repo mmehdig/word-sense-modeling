@@ -13,12 +13,12 @@ year = 2012
 
 The original file is available here: http://ai.stanford.edu/~ehhuang/
 
-In this version we only kept average human judgment:
+In this version we only kept average human judgment. Each line of the file contains:
 ```
-<id>   <word1>   <POS of word1>   <word2>   <POS of word2>   <word1 in context>   <word2 in context>   <average human rating>   <10 individual human ratings>
+<id>	<word1>	<POS of word1>	<word2>	<POS of word2>	<word1 in context>	<word2 in context>	<average human rating>
 ```
 
 The correlation of VSM performance and average human judgment can be computed by:
 ```
-./scws_correlation model_file < scws_modified.txt  
+./scws_correlation model_file < scws_modified.txt
 ```
