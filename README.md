@@ -1,7 +1,7 @@
 # word-sense-modeling
 These are some codes related to my master thesis. Supplementary documents and codes will be added in future.
 
-### Annorate words with paralle corpus (python code)
+### Annotate words with parallel corpus (python code)
 More info will come here
 
 ### Convert to word2vec (C code)
