@@ -1,12 +1,15 @@
 ### Stanford Contextual Word Similarity (SCWS)
 
 This dataset is introduced by this paper:
+```
 @inproceedings{HuangEtAl2012,
 author = {Eric H. Huang and Richard Socher and Christopher D. Manning and Andrew Y. Ng},
 title = {Improving Word Representations via Global Context and Multiple Word Prototypes},
 booktitle = {Annual Meeting of the Association for Computational Linguistics (ACL)},
 year = 2012
 }
+```
+
 
 The original file is available here: http://ai.stanford.edu/~ehhuang/
 
